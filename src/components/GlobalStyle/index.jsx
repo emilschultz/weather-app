@@ -18,6 +18,10 @@ const GlobalStyle = createGlobalStyle`
 
   main {
     min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   
