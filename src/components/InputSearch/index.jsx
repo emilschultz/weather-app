@@ -5,6 +5,7 @@ const InputSearch = styled.input`
   height: 2.5rem;
   margin: 0 0 5rem 0;
   padding: .50rem;
+  font-size: 1rem;
 
   appearance: none;
   background: none;

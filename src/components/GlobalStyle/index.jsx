@@ -23,10 +23,6 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     align-items: center;
   }
-
-  
-
-   
 `;
 
 export default GlobalStyle;

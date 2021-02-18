@@ -1,14 +1,14 @@
-import React from 'react';
-
-import GlobalStyle from './components/GlobalStyle';
+import React, { useState } from 'react';
 import Background from './components/Background';
-import LocationWrapper from './components/LocationWrapper';
+import DateWrapper from './components/DateWrapper';
+import GlobalStyle from './components/GlobalStyle';
 import InputSearch from './components/InputSearch';
+import LocationWrapper from './components/LocationWrapper';
+import Temperature from './components/Temperature';
+import Weather from './components/Weather';
 
+const key = process.env.KEY;
 
-// const key = process.env.KEY;
-
-// api.openweathermap.org/data/2.5/
 
 const dateBuilder = currentDate => {
   
@@ -25,6 +25,22 @@ const dateBuilder = currentDate => {
 }
 
 function App() {
+
+  const [query, setQuery] = useState('');
+  const [weather, setWeather] = useState('');
+
+  const search = event => {
+    if (event.key === "Enter") {
+      fetch(`http://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&APPID=${key}`)
+        .then(response => response.json())
+        .then(data => {
+          setWeather(data);
+          setQuery('');
+          console.log(data)
+        });
+      }
+  }
+
   return (
     <Background>
       <GlobalStyle />
@@ -32,18 +48,21 @@ function App() {
           <InputSearch
             type="text"
             className="search-bar"
-            placeholder="Search weather..."
+            placeholder="Search..."
+            onChange={event => setQuery(event.target.value)}
+            value={query}
+            onKeyPress={search}
           />
-          <LocationWrapper>
-            <div>New York City, US</div>
-            <div>{dateBuilder(new Date())}</div>
-            <div>
-              -2 deg celsius
-            </div>
-            <div>
-              Snowy
-            </div>
-          </LocationWrapper>
+          {(typeof weather.main != "undefined") ? (
+            <LocationWrapper>
+              <h1>{weather.name}, {weather.sys.country}</h1>
+              <DateWrapper>{dateBuilder(new Date())}</DateWrapper>
+              <div>
+                <Temperature>{Math.round(weather.main.temp)}°c</Temperature>
+                <Weather>{weather.weather[0].main}</Weather>
+              </div>
+            </LocationWrapper>
+          ) : ('')}
       </main>
     </Background>
   )
